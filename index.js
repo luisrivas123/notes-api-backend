@@ -13,19 +13,22 @@ let notes = [
     userId: 1,
     id: 1,
     title: 'Tutorial 1',
-    body: 'quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto'
+    body: 'quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto',
+    important: true
   },
   {
     userId: 1,
     id: 2,
     title: 'Tutorial 2',
-    body: 'est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla'
+    body: 'est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla',
+    important: false
   },
   {
     userId: 1,
     id: 3,
     title: 'Tutorial 3',
-    body: 'et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut'
+    body: 'et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut',
+    important: true
   }
 ]
 
@@ -65,6 +68,20 @@ app.post('/api/notes', (request, response) => {
   notes = notes.concat(newNote)
 
   response.status(201).json(newNote)
+})
+
+app.put('/api/notes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const important = request.body
+  const note = notes.find(note => note.id === id)
+
+  const changedNote = { ...note, important: request.body.important }
+  notes = notes.map(note => note.id !== id ? note : changedNote)
+  if (note) {
+    response.json(important)
+  } else {
+    response.status(404).end()
+  }
 })
 
 app.delete('/api/notes/:id', (request, response) => {
