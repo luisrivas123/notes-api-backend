@@ -1,7 +1,9 @@
-POST http://localhost:3000/api/notes
+POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "Esto es una nueva nota",
+    "title": "Tutorial 1",
+    "body": "Esto es otra nota nueva",
+    "userId": 2,
     "important": true
 }

@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/notes/62f065b6c5e969cebd28ebb2
+Content-Type: application/json
+
+{
+    "title": "Tutorial 4",
+    "important": false
+}
