@@ -42,15 +42,15 @@ app.get('/api/notes/:id', (request, response, next) => {
 app.post('/api/notes', (request, response) => {
   const note = request.body
   // console.log(note)
-  if (!note.body) {
+  if (!note.content) {
     return response.status(400).json({
-      error: 'require "body" field is missing'
+      error: 'require "content" field is missing'
     })
   }
 
   const newNote = new Note({
     title: note.title,
-    body: note.body,
+    content: note.content,
     date: new Date(),
     userId: note.userId,
     important: typeof note.important !== 'undefined' ? note.important : false
@@ -63,10 +63,10 @@ app.post('/api/notes', (request, response) => {
 
 app.put('/api/notes/:id', (request, response, next) => {
   const { id } = request.params
-  const note = request.body
+  const note = request.content
   const noteUpDate = {
     title: note.title,
-    body: note.body,
+    content: note.content,
     userId: note.userId,
     important: note.important
   }
@@ -88,7 +88,9 @@ app.delete('/api/notes/:id', (request, response, next) => {
 app.use(notFound)
 app.use(handleErrors)
 
-const PORT = process.env.PORT
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3001
+const server = app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`)
 })
+
+module.exports = { app, server }

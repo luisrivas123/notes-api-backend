@@ -2,7 +2,7 @@ const { model, Schema } = require('mongoose')
 
 const noteSchema = new Schema({
   title: String,
-  body: String,
+  content: String,
   date: Date,
   userId: Number,
   important: Boolean
