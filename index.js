@@ -16,10 +16,13 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello world</h1>')
 })
 
-app.get('/api/notes', (request, response) => {
-  Note.find({}).then(notes => {
-    response.json(notes)
-  })
+app.get('/api/notes', async (request, response) => {
+  const notes = await Note.find({})
+  response.json(notes)
+
+  // Note.find({}).then(notes => {
+  //   response.json(notes)
+  // })
 })
 
 app.get('/api/notes/:id', (request, response, next) => {
@@ -31,15 +34,10 @@ app.get('/api/notes/:id', (request, response, next) => {
       return note
         ? response.json(note)
         : response.status(404).end()
-      // if (note) {
-      //   response.json(note)
-      // } else {
-      //   response.status(404).end()
-      // }
     }).catch(err => next(err))
 })
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', async (request, response) => {
   const note = request.body
   // console.log(note)
   if (!note.content) {
@@ -56,9 +54,16 @@ app.post('/api/notes', (request, response) => {
     important: typeof note.important !== 'undefined' ? note.important : false
   })
 
-  newNote.save().then(saveNote => {
-    response.status(201).json(saveNote)
-  })
+  // newNote.save().then(savedNote => {
+  //   response.status(201).json(savedNote)
+  // }).catch(err => next(err))
+
+  try {
+    const savedNote = await newNote.save()
+    response.status(201).json(savedNote)
+  } catch (error) {
+    next(error)
+  }
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
@@ -79,10 +84,12 @@ app.put('/api/notes/:id', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
   const { id } = request.params
-
   Note.findByIdAndRemove(id)
     .then(() => response.status(204).end())
     .catch(error => next(error))
+
+  // await Note.findByIdAndRemove(id)
+  // response.status(204).end()
 })
 
 app.use(notFound)

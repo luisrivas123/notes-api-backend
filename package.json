@@ -7,7 +7,7 @@
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
-    "test": "NODE_ENV=test jest --verbose --silent",
+    "test": "NODE_ENV=test jest --silent tests/notes.test.js",
     "test:watch": "npm run test -- --watch"
   },
   "author": "",
@@ -16,7 +16,7 @@
     "jest": "26.6.3",
     "nodemon": "2.0.19",
     "standard": "17.0.0",
-    "supertest": "^6.2.4"
+    "supertest": "6.2.4"
   },
   "dependencies": {
     "cors": "2.8.5",

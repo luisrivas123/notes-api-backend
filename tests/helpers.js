@@ -18,6 +18,13 @@ const initialNotes = [
     userId: 1,
     date: new Date(),
     important: true
+  },
+  {
+    title: 'Tutorial 4',
+    content: 'Esto es otra nota',
+    userId: 1,
+    date: new Date(),
+    important: true
   }
 ]
 
