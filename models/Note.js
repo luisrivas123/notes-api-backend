@@ -5,14 +5,18 @@ const noteSchema = new Schema({
   content: String,
   date: Date,
   userId: Number,
-  important: Boolean
+  important: Boolean,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 noteSchema.set('toJSON', {
-  transform: (document, returnObject) => {
-    returnObject.id = returnObject._id
-    delete returnObject._id
-    delete returnObject.__v
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id
+    delete returnedObject._id
+    delete returnedObject.__v
   }
 })
 
