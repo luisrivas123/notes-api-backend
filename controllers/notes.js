@@ -53,7 +53,7 @@ notesRouter.post('/', async (request, response, next) => {
 
 notesRouter.put('/:id', (request, response, next) => {
   const { id } = request.params
-  const note = request.content
+  const note = request.body
   const noteUpDate = {
     title: note.title,
     content: note.content,
