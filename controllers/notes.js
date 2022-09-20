@@ -1,8 +1,12 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/Note')
+const User = require('../models/User')
 
 notesRouter.get('/', async (request, response) => {
-  const notes = await Note.find({})
+  const notes = await Note.find({}).populate('user', {
+    username: 1,
+    name: 1
+  })
   response.json(notes)
 
   // Note.find({}).then(notes => {
@@ -23,20 +27,25 @@ notesRouter.get('/:id', (request, response, next) => {
 })
 
 notesRouter.post('/', async (request, response, next) => {
-  const note = request.body
-  // console.log(note)
-  if (!note.content) {
+  // const note = request.body
+  // Desestructuración
+  const { title, content, userId, important = false } = request.body
+
+  const user = await User.findById(userId)
+
+  if (!content) {
     return response.status(400).json({
-      error: 'require "content" field is missing'
+      error: 'required "content" field is missing'
     })
   }
 
   const newNote = new Note({
-    title: note.title,
-    content: note.content,
+    title,
+    content,
     date: new Date(),
-    userId: note.userId,
-    important: typeof note.important !== 'undefined' ? note.important : false
+    // important: typeof note.important !== 'undefined' ? note.important : false
+    important,
+    user: user._id
   })
 
   // newNote.save().then(savedNote => {
@@ -45,6 +54,10 @@ notesRouter.post('/', async (request, response, next) => {
 
   try {
     const savedNote = await newNote.save()
+
+    user.notes = user.notes.concat(savedNote._id)
+    await user.save()
+
     response.status(201).json(savedNote)
   } catch (error) {
     next(error)
